@@ -1,16 +1,28 @@
-const WebSocket = require('ws')
-const wss = new WebSocket.Server({port: 8080},()=>{
-    console.log('Server Started')
-})
+//--------------------------------------------------------------------
+//|                                                                  |
+//|                 UDP Server Game (Nodejs & Unity)                 |
+//|                                                                  |
+//--------------------------------------------------------------------
 
-wss.on('connection', function connection(ws) {
-    ws.on('message', (data)=>{
-        //Nhận data và in data gửi ra ngoài màn hình
-        console.log('Data recevied: ' + data)
-        ws.send(data);
+const dgram = require('dgram');
+const server = dgram.createSocket('udp4');
+
+server.on('error', (err)=>{
+    console.log('server error: '+ err.stack);
+    
+    server.close();
+});
+
+server.on('message', (msg, senderInfo) =>{
+    console.log('Messages received ' + msg)
+    server.send(msg, senderInfo.port, senderInfo.address,()=>{
+        console.log('Message sent to ' + senderInfo.address + ':' +senderInfo.port)
     })
-})
+});
 
-wss.on('listening',()=>{
-    console.log('Listening on 8080')
-})
+server.on('listening', () =>{
+    const address = server.address();
+    console.log('Server listening on ' + address.address + ':' + address.port);
+});
+
+server.bind(5500); 
