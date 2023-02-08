@@ -21,7 +21,7 @@ server.on('message', (msg, senderInfo) =>{
     //In tin nhắn đã nhận của người chơi
     console.log('Messages received ' + msg)
     //Server gửi tin nhắn từ người chơi
-    server.sed(msg, senderInfo.port, senderInfo.address,()=>{
+    server.send(msg, senderInfo.port, senderInfo.address,()=>{
         console.log('Message sent to ' + senderInfo.address + ':' + senderInfo.port
                     + time.getMinutes())
     })
