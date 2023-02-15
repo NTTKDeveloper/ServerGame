@@ -19,10 +19,13 @@ wss.on('connection', function connection(ws, req) {
   ws.isAlive = true;
   ws.on('error', console.error);
   //Message
-  ws.on('message', function incoming(data) {
-    console.log('data received \n' + data)
-    ws.send(data.toString());
-    // ws.ping();
+  ws.on('message', function incoming(msg) {
+	  //Server need password
+	  if (msg.toString() != "0" ){
+		  ws.send("password");
+	  }else{ //
+		  ws.send("register");
+	  }
   })
   //Bắt sự kiện pong
   ws.on('pong', hearbeat);
